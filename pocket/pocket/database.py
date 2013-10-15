@@ -12,9 +12,9 @@ def add_models(Base):
         id = Column(Integer, primary_key=True)
         case_execution_id = Column(Integer, ForeignKey('testCaseExecution.id'))
         case_execution = relationship('CaseExecution', backref='log_messages')
-        message = Column(String)
-        level = Column(String)
-        source = Column(String)
+        message = Column(String(5000))
+        level = Column(String(20))
+        source = Column(String(200))
         time_logged = Column(DateTime)
         
         def __init__(self, message, level, source, case_execution=None, time=None):
