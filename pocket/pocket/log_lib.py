@@ -66,9 +66,11 @@ class TissueHandler(Handler):
         
         self.acquire()
         if self.session_objects:
-            _, error, capture = message.partition(self.last_error[1].message
-                                                  if hasattr(self.last_error[1], 'message')
-                                                  else self.last_error[1].msg)
+            sep = self.last_error[1].message if hasattr(self.last_error[1], 'message') else self.last_error[1].msg
+            if sep:
+                _, error, capture = message.partition(sep)
+            else:
+                _, error, capture = message.partition('\n')
             error = message
             capture = capture.strip('\n')
             message = 'Test Skipped' + ((': %s' % error) if error else '')
@@ -87,9 +89,11 @@ class TissueHandler(Handler):
         
         self.acquire()
         if self.session_objects:
-            _, error, capture = message.partition(self.last_error[1].message
-                                                  if hasattr(self.last_error[1], 'message')
-                                                  else self.last_error[1].msg)
+            sep = self.last_error[1].message if hasattr(self.last_error[1], 'message') else self.last_error[1].msg
+            if sep:
+                _, error, capture = message.partition(sep)
+            else:
+                _, error, capture = message.partition('\n')
             capture = capture.strip('\n')
             message = 'Test Failed' + ((': %s' % error) if error else '')
             self.session_objects['case_execution'].log_messages.append(self.tissue.db_models['LogMessage'](message,
