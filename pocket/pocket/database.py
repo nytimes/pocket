@@ -7,10 +7,10 @@ def add_models(Base):
     
     class LogMessage(Base):
         
-        __tablename__ = 'logMessage'
+        __tablename__ = 'log_message'
         
         id = Column(Integer, primary_key=True)
-        case_execution_id = Column(Integer, ForeignKey('testCaseExecution.id'))
+        case_execution_id = Column(Integer, ForeignKey('test_case_execution.id'))
         case_execution = relationship('CaseExecution', backref='log_messages')
         message = Column(String(5000))
         level = Column(String(20))
