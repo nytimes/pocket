@@ -12,7 +12,7 @@ def add_models(Base):
         id = Column(Integer, primary_key=True)
         case_execution_id = Column(Integer, ForeignKey('test_case_execution.id'))
         case_execution = relationship('CaseExecution', backref='log_messages')
-        message = Column(String(5000))
+        message = Column(String(10000))
         level = Column(String(20))
         source = Column(String(200))
         time_logged = Column(DateTime)
