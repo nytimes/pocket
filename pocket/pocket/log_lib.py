@@ -1,4 +1,5 @@
 from logging import Handler, getLogger
+from datetime import datetime, timedelta
 
 
 def add_options(parser, env):
@@ -10,7 +11,12 @@ def add_options(parser, env):
                       action='store',
                       dest='pocket_batch_size',
                       type=int,
-                      default=10)
+                      default=200)
+    parser.add_option('--pocket-write-frequency',
+                      action='store',
+                      dest='pocket_write_frequency',
+                      type=float,
+                      default=2.)
 
 class TissueHandler(Handler):
     
@@ -19,6 +25,11 @@ class TissueHandler(Handler):
         Handler.__init__(self)
         self.tissue = tissue
         self.message_buffer_size = options.pocket_batch_size
+        if options.pocket_write_frequency > 0:
+            self.write_frequency = timedelta(options.pocket_write_frequency)
+            self.next_write = datetime.now() + self.write_frequency
+        else:
+            self.next_write = self.write_frequency = None
         self.buffered_messsage_count = 0
         self.session = None
         self.session_objects = {}
@@ -48,7 +59,8 @@ class TissueHandler(Handler):
                                                                                                            record.levelname, 
                                                                                                            record.name))
             self.buffered_messsage_count += 1
-            if self.buffered_messsage_count >= self.message_buffer_size:
+            if ((self.next_write and datetime.now() >= self.next_write)
+                or self.buffered_messsage_count >= self.message_buffer_size):
                 self.flush()
     
     def flush(self):
@@ -56,6 +68,7 @@ class TissueHandler(Handler):
         self.tissue.access_lock.acquire()
         self.session.commit()
         self.buffered_messsage_count = 0
+        self.next_write += self.write_frequency
         self.tissue.access_lock.release()
     
     def peek_error(self, test, err):
