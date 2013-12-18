@@ -6,17 +6,20 @@ def add_options(parser, env):
     
     parser.add_option('--close-pocket',
                       action='store_true',
-                      dest='close_pocket')
+                      dest='close_pocket',
+                      help='')
     parser.add_option('--pocket-batch-size',
                       action='store',
                       dest='pocket_batch_size',
                       type=int,
-                      default=200)
+                      default=200,
+                      help='')
     parser.add_option('--pocket-write-frequency',
                       action='store',
                       dest='pocket_write_frequency',
                       type=float,
-                      default=2.)
+                      default=2.,
+                      help='')
 
 class TissueHandler(Handler):
     
@@ -132,6 +135,9 @@ class TissueHandler(Handler):
     
     def after_exit_case(self, result):
         
+        # TODO: Fix this bug... exit_case is not called for executions of default case,
+        # so it may be possible to drop messages, or have them end up attached to the
+        # wrong execution, because we rely on after_exit_case to do a flushing cleanup.
         self.flush()
     
     def exit_cycle(self):
