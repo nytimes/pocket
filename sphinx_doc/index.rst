@@ -34,6 +34,10 @@ the time a message was created is recorded when the message is handled, so
 will still be an accurate reference to when the activity that triggered the
 message occurred.
 
+Repo
+====
+https://github.com/NYTimes/pocket
+
 Details
 =======
 
