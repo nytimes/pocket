@@ -13,8 +13,8 @@ database.
 Installation and Quickstart
 ===========================
 
-Installing pocket (ex via pip) will enable it for all ``nosetests`` runs where
-Sneeze is enabled.
+Installing pocket (``pip install sneeze-pocket``) will enable it for all 
+``nosetests`` runs where Sneeze is enabled.
 
 Overview
 ========
