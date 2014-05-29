@@ -142,4 +142,8 @@ class TissueHandler(Handler):
     
     def exit_cycle(self):
         
+        try:
+            getLogger().removeHandler(self)
+        except ValueError:
+            pass
         self.flush()
